@@ -799,6 +799,7 @@ private extension TTGSnackbar {
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .left
         messageLabel.text = message
+        setLineSpacing(textLabel: messageLabel, alignment:.center)
         contentView.addSubview(messageLabel)
         
         actionButton = UIButton()
@@ -839,7 +840,7 @@ private extension TTGSnackbar {
         
         // Add constraints
         let hConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-0-[iconImageView]-2-[messageLabel]-2-[seperateView(0.5)]-2-[actionButton(>=44@999)]-0-[secondActionButton(>=44@999)]-0-|",
+            withVisualFormat: "H:|-10-[iconImageView]-10-[messageLabel]-2-[seperateView(0.5)]-2-[actionButton(>=44@999)]-0-[secondActionButton(>=44@999)]-10-|",
             options: NSLayoutConstraint.FormatOptions(rawValue: 0),
             metrics: nil,
             views: ["iconImageView": iconImageView, "messageLabel": messageLabel, "seperateView": separateView, "actionButton": actionButton, "secondActionButton": secondActionButton])
@@ -929,6 +930,10 @@ private extension TTGSnackbar {
             gesture.direction = direction
             self.addGestureRecognizer(gesture)
         }
+    }
+    func setLineSpacing(textLabel: UILabel, lineHeight: CGFloat = 0.75, alignment: NSTextAlignment = .left) {
+        textLabel.setLineSpacing(lineHeightMultiple: lineHeight)
+        textLabel.textAlignment = alignment
     }
 }
 
