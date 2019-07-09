@@ -56,8 +56,8 @@ open class TTGSnackbar: UIView {
     fileprivate static let snackbarDefaultFrame: CGRect = CGRect(x: 0, y: 0, width: 320, height: 44)
     
     /// Snackbar min height
-    fileprivate static let snackbarMinHeight: CGFloat = 60
-    
+    public static var snackbarMinHeight: CGFloat = 60
+
     /// Snackbar icon imageView default width
     fileprivate static let snackbarIconImageViewWidth: CGFloat = 32
     
@@ -799,7 +799,7 @@ private extension TTGSnackbar {
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .left
         messageLabel.text = message
-        setLineSpacing(textLabel: messageLabel, alignment:.left)
+        setLineSpacing(textLabel: messageLabel, alignment:.left )
         contentView.addSubview(messageLabel)
         
         actionButton = UIButton()
@@ -840,7 +840,7 @@ private extension TTGSnackbar {
         
         // Add constraints
         let hConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-10-[iconImageView]-10-[messageLabel]-2-[seperateView(0.5)]-2-[actionButton(>=44@999)]-0-[secondActionButton(>=44@999)]-10-|",
+            withVisualFormat: "H:|-0-[iconImageView]-10-[messageLabel]-2-[seperateView(0.5)]-2-[actionButton(>=44@999)]-0-[secondActionButton(>=44@999)]-0-|",
             options: NSLayoutConstraint.FormatOptions(rawValue: 0),
             metrics: nil,
             views: ["iconImageView": iconImageView, "messageLabel": messageLabel, "seperateView": separateView, "actionButton": actionButton, "secondActionButton": secondActionButton])
