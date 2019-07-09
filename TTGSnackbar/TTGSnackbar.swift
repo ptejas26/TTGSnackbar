@@ -56,7 +56,7 @@ open class TTGSnackbar: UIView {
     fileprivate static let snackbarDefaultFrame: CGRect = CGRect(x: 0, y: 0, width: 320, height: 44)
     
     /// Snackbar min height
-    fileprivate static let snackbarMinHeight: CGFloat = 44
+    fileprivate static let snackbarMinHeight: CGFloat = 60
     
     /// Snackbar icon imageView default width
     fileprivate static let snackbarIconImageViewWidth: CGFloat = 32
@@ -799,7 +799,7 @@ private extension TTGSnackbar {
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .left
         messageLabel.text = message
-        setLineSpacing(textLabel: messageLabel, alignment:.center)
+        setLineSpacing(textLabel: messageLabel, alignment:.left)
         contentView.addSubview(messageLabel)
         
         actionButton = UIButton()
