@@ -1054,11 +1054,11 @@ extension UILabel {
         paragraphStyle.alignment = alignment
         
         let attributedString:NSMutableAttributedString
-        if let labelattributedText = self.attributedText {
-            attributedString = NSMutableAttributedString(attributedString: labelattributedText)
-        } else {
+//        if let labelattributedText = self.attributedText {
+//            attributedString = NSMutableAttributedString(attributedString: labelattributedText)
+//        } else {
             attributedString = NSMutableAttributedString(string: labelText)
-        }
+      //  }
         
         // Line spacing attribute
         attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
@@ -1074,4 +1074,5 @@ extension UILabel {
         attributedString.addAttributes(boldFontAttribute, range: range)
         return attributedString
     }
+    
 }
