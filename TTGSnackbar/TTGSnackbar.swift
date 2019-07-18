@@ -56,7 +56,7 @@ open class TTGSnackbar: UIView {
     fileprivate static let snackbarDefaultFrame: CGRect = CGRect(x: 0, y: 0, width: 320, height: 44)
     
     /// Snackbar min height
-    fileprivate static let snackbarMinHeight: CGFloat = 44
+    public static var snackbarMinHeight: CGFloat = 60
     
     /// Snackbar icon imageView default width
     fileprivate static let snackbarIconImageViewWidth: CGFloat = 32
@@ -790,6 +790,7 @@ private extension TTGSnackbar {
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .left
         messageLabel.text = message
+        setLineSpacing(textLabel: messageLabel, alignment:.left )
         contentView.addSubview(messageLabel)
 
         actionButton = UIButton()
@@ -919,6 +920,10 @@ private extension TTGSnackbar {
             self.addGestureRecognizer(gesture)
         }
     }
+    func setLineSpacing(textLabel: UILabel, lineHeight: CGFloat = 0.75, alignment: NSTextAlignment = .left) {
+        textLabel.setLineSpacing(lineHeightMultiple: lineHeight)
+        textLabel.textAlignment = alignment
+    }
 }
 
 // MARK: - Actions
@@ -982,4 +987,81 @@ private extension TTGSnackbar {
         messageLabel.preferredMaxLayoutWidth = messageLabel.frame.size.width
         layoutIfNeeded()
     }
+}
+
+// MARK: - Keyboard notification
+
+private extension TTGSnackbar {
+    @objc func onKeyboardShow(_ notification: Notification?) {
+        if keyboardIsShown {
+            return
+        }
+        keyboardIsShown = true
+        
+        guard let keyboardFrame = notification?.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        if #available(iOS 11.0, *) {
+            keyboardHeight = keyboardFrame.cgRectValue.height - self.safeAreaInsets.bottom
+        } else {
+            keyboardHeight = keyboardFrame.cgRectValue.height
+        }
+        
+        keyboardHeight += 8
+        bottomMargin += keyboardHeight
+        
+        UIView.animate(withDuration: 0.3) {
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    
+    @objc func onKeyboardHide(_ notification: Notification?) {
+        if !keyboardIsShown {
+            return
+        }
+        keyboardIsShown = false
+        
+        bottomMargin -= keyboardHeight
+        
+        UIView.animate(withDuration: 0.3) {
+            self.superview?.layoutIfNeeded()
+        }
+    }
+}
+
+
+extension UILabel {
+    
+    func setLineSpacing(lineSpacing: CGFloat = 0.0, lineHeightMultiple: CGFloat = 0.65, alignment : NSTextAlignment = .center) {
+        
+        guard let labelText = self.text else { return }
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = lineSpacing
+        paragraphStyle.lineHeightMultiple = lineHeightMultiple
+        paragraphStyle.alignment = alignment
+        
+        let attributedString:NSMutableAttributedString
+        //        if let labelattributedText = self.attributedText {
+        //            attributedString = NSMutableAttributedString(attributedString: labelattributedText)
+        //        } else {
+        attributedString = NSMutableAttributedString(string: labelText)
+        //  }
+        
+        // Line spacing attribute
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+        
+        self.attributedText = attributedString
+    }
+    
+    func attributedSizedText(withString string: String, SizedString: String, font: UIFont, size:CGFloat) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string,
+                                                         attributes: [NSAttributedString.Key.font: font])
+        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font.withSize(size)]
+        let range = (string as NSString).range(of: SizedString)
+        attributedString.addAttributes(boldFontAttribute, range: range)
+        return attributedString
+    }
+    
 }
